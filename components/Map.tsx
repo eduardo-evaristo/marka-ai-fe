@@ -3,15 +3,10 @@ import { StyleSheet } from "react-native";
 import MapView, { LatLng, Marker } from "react-native-maps";
 
 type Props = {
-  setUserMarker: React.Dispatch<React.SetStateAction<LatLng | undefined>>;
+  createMarker: (latLng: LatLng) => void;
   userMarker?: LatLng;
 };
-export default function Map({ setUserMarker, userMarker }: Props) {
-  function createMarker(latLng: LatLng) {
-    console.log(latLng);
-    setUserMarker(latLng);
-  }
-
+export default function Map({ createMarker, userMarker }: Props) {
   return (
     <MapView
       style={styles.map}
