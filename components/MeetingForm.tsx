@@ -15,34 +15,21 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { CustomButton } from "./Button";
+import { useMeetingFormStore } from "@/stores/meetingFormStore";
 
 export default function MeetingForm() {
   const [associatedPeople, setAssociatedPeople] = useState([
     1, 2, 3, 5, 5, 5, 3, 4, 5, 5, 5,
   ]);
-  const [isDatePickerShown, setIsDatePickerShown] = useState<boolean>(false);
-  const [date, setDate] = useState<Date>(new Date());
-  const [time, setTime] = useState<Date>(new Date());
-  const [mode, setMode] = useState<"date" | "time">("date");
-
-  function handleChangeDateTime(
-    _e: DateTimePickerEvent,
-    selectedDate: Date | undefined
-  ) {
-    if (selectedDate && mode === "date") setDate(selectedDate);
-    if (selectedDate && mode === "time") setTime(selectedDate);
-    setIsDatePickerShown(false);
-  }
-
-  function handleShowDate() {
-    setMode("date");
-    setIsDatePickerShown(true);
-  }
-
-  function handleShowTime() {
-    setMode("time");
-    setIsDatePickerShown(true);
-  }
+  const {
+    date,
+    time,
+    mode,
+    datePickerIsShown,
+    showDate,
+    showTime,
+    onChangeDateTime,
+  } = useMeetingFormStore((state) => state);
 
   return (
     <View style={styles.container}>
@@ -75,7 +62,7 @@ export default function MeetingForm() {
         }}
       >
         <View>
-          <Pressable onPress={handleShowDate}>
+          <Pressable onPress={showDate}>
             <FormLabel label="Data" />
             <Input
               width={"45%"}
@@ -85,7 +72,7 @@ export default function MeetingForm() {
           </Pressable>
         </View>
         <View>
-          <Pressable onPress={handleShowTime}>
+          <Pressable onPress={showTime}>
             <FormLabel label="Horário" />
             <Input
               width={"45%"}
@@ -96,11 +83,11 @@ export default function MeetingForm() {
             />
           </Pressable>
         </View>
-        {isDatePickerShown && (
+        {datePickerIsShown && (
           <DateTimePicker
             value={new Date()}
             mode={mode}
-            onChange={handleChangeDateTime}
+            onChange={onChangeDateTime}
           />
         )}
       </View>
